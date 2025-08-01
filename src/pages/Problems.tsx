@@ -20,7 +20,9 @@ export function Problems() {
         const response = await problemsAPI.getProblems({
           difficulty: difficultyFilter !== 'all' ? difficultyFilter : undefined,
         });
-        setProblems(response.data);
+        // Handle both paginated and non-paginated responses
+        const problemsData = response.data.results || response.data;
+        setProblems(problemsData);
       } catch (error) {
         console.error('Failed to fetch problems:', error);
       } finally {
@@ -31,9 +33,9 @@ export function Problems() {
     fetchProblems();
   }, [difficultyFilter]);
 
-  const filteredProblems = problems.filter(problem =>
+  const filteredProblems = (problems || []).filter(problem =>
     problem.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    problem.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+    (problem.tags && problem.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase())))
   );
 
   if (loading) {
@@ -103,12 +105,12 @@ export function Problems() {
                 </div>
                 
                 <div className="flex flex-wrap gap-2 pt-2">
-                  {problem.tags.slice(0, 3).map((tag) => (
+                  {(problem.tags || []).slice(0, 3).map((tag) => (
                     <Badge key={tag} variant="secondary" className="text-xs">
                       {tag}
                     </Badge>
                   ))}
-                  {problem.tags.length > 3 && (
+                  {problem.tags && problem.tags.length > 3 && (
                     <Badge variant="outline" className="text-xs">
                       +{problem.tags.length - 3}
                     </Badge>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
@@ -49,14 +49,45 @@ export interface TestCase {
 
 export interface Submission {
   id: number;
-  problem: number;
+  problem: number | Problem;
   user: number;
   code: string;
   language: string;
-  verdict: 'Pending' | 'Accepted' | 'Wrong Answer' | 'Time Limit Exceeded' | 'Compilation Error';
+  verdict: 'Pending' | 'Accepted' | 'Wrong Answer' | 'Time Limit Exceeded' | 'Compilation Error' | 'Runtime Error' | 'Memory Limit Exceeded';
   execution_time?: number;
   memory?: number;
   submitted_at: string;
+  evaluated_at?: string;
+  error_message?: string;
+  test_cases_passed?: number;
+  total_test_cases?: number;
+}
+
+export interface ContestSubmission {
+  id: number;
+  contest: {
+    id: number;
+    title: string;
+  };
+  participant: {
+    id: number;
+    user: {
+      id: number;
+      username: string;
+    };
+  };
+  problem: number | Problem;
+  code: string;
+  language: string;
+  verdict: 'Pending' | 'Accepted' | 'Wrong Answer' | 'Time Limit Exceeded' | 'Compilation Error' | 'Runtime Error' | 'Memory Limit Exceeded';
+  execution_time?: number;
+  memory?: number;
+  submitted_at: string;
+  evaluated_at?: string;
+  error_message?: string;
+  test_cases_passed?: number;
+  total_test_cases?: number;
+  score: number;
 }
 
 export interface AIAssistantLog {
@@ -71,14 +102,16 @@ export interface AIAssistantLog {
 // API Functions
 export const authAPI = {
   login: (username: string, password: string) =>
-    api.post('/auth/login/', { username, password }),
+    api.post('/users/login/', { username, password }),
   
   register: (username: string, email: string, password: string) =>
-    api.post('/auth/register/', { username, email, password }),
+    api.post('/users/register/', { username, email, password }),
   
-  logout: () => api.post('/auth/logout/'),
+  logout: () => api.post('/users/logout/'),
   
-  getProfile: () => api.get('/auth/profile/'),
+  getProfile: () => api.get('/users/profile/'),
+  
+  updateProfile: (data: any) => api.put('/users/profile/update/', data),
 };
 
 export const problemsAPI = {
@@ -88,33 +121,65 @@ export const problemsAPI = {
   getProblem: (id: number) => api.get(`/problems/${id}/`),
   
   createProblem: (problem: Omit<Problem, 'id' | 'created_by'>) =>
-    api.post('/admin/problems/', problem),
+    api.post('/problems/', problem),
   
   updateProblem: (id: number, problem: Partial<Problem>) =>
-    api.put(`/admin/problems/${id}/`, problem),
+    api.put(`/problems/${id}/`, problem),
   
-  deleteProblem: (id: number) => api.delete(`/admin/problems/${id}/`),
+  deleteProblem: (id: number) => api.delete(`/problems/${id}/`),
 };
 
 export const submissionsAPI = {
   submitSolution: (problemId: number, code: string, language: string) =>
-    api.post('/submissions/', { problem: problemId, code, language }),
+    api.post('/submissions/create/', { problem: problemId, code, language }),
   
   getSubmissions: (params?: { problem?: number; user?: number; verdict?: string }) =>
     api.get('/submissions/', { params }),
   
   getSubmission: (id: number) => api.get(`/submissions/${id}/`),
+  
+  runTest: (problemId: number, code: string, language: string) =>
+    api.post('/submissions/run-test/', { problem_id: problemId, code, language }),
 };
 
 export const leaderboardAPI = {
   getLeaderboard: (params?: { problem?: number }) =>
-    api.get('/leaderboard/', { params }),
+    api.get('/submissions/leaderboard/', { params }),
+  
+  getSubmissionStats: () => api.get('/submissions/stats/'),
 };
 
 export const aiAssistantAPI = {
   sendMessage: (query: string, problemId?: number, code?: string) =>
-    api.post('/ai-assistant/', { query, problem: problemId, code }),
+    api.post('/ai-assistant/chat/', { query, problem_id: problemId, code }),
   
   getHistory: (problemId?: number) =>
-    api.get('/ai-assistant/', { params: { problem: problemId } }),
+    api.get('/ai-assistant/logs/', { params: { problem: problemId } }),
+  
+  getStats: () => api.get('/ai-assistant/stats/'),
+};
+
+export const contestsAPI = {
+  getContests: (params?: { status?: string }) =>
+    api.get('/contests/', { params }),
+  
+  getContest: (id: number) => api.get(`/contests/${id}/`),
+  
+  registerForContest: (contestId: number) =>
+    api.post(`/contests/${contestId}/register/`),
+  
+  getContestProblems: (contestId: number) =>
+    api.get(`/contests/${contestId}/problems/`),
+  
+  getContestLeaderboard: (contestId: number) =>
+    api.get(`/contests/${contestId}/leaderboard/`),
+  
+  getContestSubmissions: (contestId: number) =>
+    api.get(`/contests/${contestId}/submissions/`),
+  
+  getUserContestSubmissions: (contestId?: number) =>
+    api.get('/contests/submissions/', { params: { contest: contestId } }),
+  
+  submitContestSolution: (contestId: number, problemId: number, code: string, language: string) =>
+    api.post(`/contests/${contestId}/submissions/create/`, { problem: problemId, code, language }),
 };

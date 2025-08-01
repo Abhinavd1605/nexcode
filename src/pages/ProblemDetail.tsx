@@ -7,6 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DifficultyBadge } from '@/components/problem/DifficultyBadge';
 import { CodeEditor } from '@/components/problem/CodeEditor';
+import { AIAssistant } from '@/components/problem/AIAssistant';
 import { ArrowLeft, MessageSquare } from 'lucide-react';
 import { problemsAPI, submissionsAPI, Problem } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
@@ -16,6 +17,8 @@ export function ProblemDetail() {
   const [problem, setProblem] = useState<Problem | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [currentCode, setCurrentCode] = useState('');
+  const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -61,6 +64,14 @@ export function ProblemDetail() {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleCodeChange = (code: string) => {
+    setCurrentCode(code);
+  };
+
+  const handleAIAssistantClick = () => {
+    setIsAIAssistantOpen(true);
   };
 
   if (loading) {
@@ -117,11 +128,13 @@ export function ProblemDetail() {
             Back
           </Link>
         </Button>
-        <Button asChild variant="outline" size="sm">
-          <Link to={`/ai-assistant?problem=${problem.id}`}>
-            <MessageSquare className="mr-2 h-4 w-4" />
-            Ask AI
-          </Link>
+        <Button 
+          variant="outline" 
+          size="sm"
+          onClick={handleAIAssistantClick}
+        >
+          <MessageSquare className="mr-2 h-4 w-4" />
+          Ask AI Assistant
         </Button>
       </div>
 
@@ -187,9 +200,22 @@ export function ProblemDetail() {
             starterCode={problem.starter_code}
             onSubmit={handleSubmit}
             isSubmitting={submitting}
+            onCodeChange={handleCodeChange}
+            onAIAssistantClick={handleAIAssistantClick}
           />
         </div>
       </div>
+
+      {/* AI Assistant Modal */}
+      <AIAssistant
+        problemId={problem.id}
+        problemTitle={problem.title}
+        problemDescription={problem.description}
+        problemConstraints={problem.constraints}
+        currentCode={currentCode}
+        isOpen={isAIAssistantOpen}
+        onClose={() => setIsAIAssistantOpen(false)}
+      />
     </div>
   );
 }

@@ -58,6 +58,7 @@ export default {
 				info: 'hsl(var(--info))',
 				'code-bg': 'hsl(var(--code-bg))',
 				'code-border': 'hsl(var(--code-border))',
+				'code-text': 'hsl(var(--code-text))',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',

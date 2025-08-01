@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Code, LogOut, Settings, User, Trophy, BookOpen, MessageSquare } from 'lucide-react';
+import { Code, LogOut, Settings, User, Trophy, BookOpen, MessageSquare, Users } from 'lucide-react';
 
 interface HeaderProps {
   user?: {
@@ -24,13 +24,16 @@ export function Header({ user, onLogout }: HeaderProps) {
             <Code className="h-6 w-6 text-primary-foreground" />
           </div>
           <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-            CodeJudge
+            NexCode
           </span>
         </Link>
 
         <nav className="hidden md:flex items-center space-x-6">
           <Link to="/problems" className="text-foreground/80 hover:text-foreground transition-colors">
             Problems
+          </Link>
+          <Link to="/contests" className="text-foreground/80 hover:text-foreground transition-colors">
+            Contests
           </Link>
           <Link to="/submissions" className="text-foreground/80 hover:text-foreground transition-colors">
             Submissions
@@ -64,6 +67,10 @@ export function Header({ user, onLogout }: HeaderProps) {
                   <BookOpen className="mr-2 h-4 w-4" />
                   My Submissions
                 </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/contests')}>
+                  <Trophy className="mr-2 h-4 w-4" />
+                  Contests
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => navigate('/leaderboard')}>
                   <Trophy className="mr-2 h-4 w-4" />
                   Leaderboard
@@ -73,10 +80,20 @@ export function Header({ user, onLogout }: HeaderProps) {
                   AI Assistant
                 </DropdownMenuItem>
                 {user.role === 'Admin' && (
-                  <DropdownMenuItem onClick={() => navigate('/admin')}>
-                    <Settings className="mr-2 h-4 w-4" />
-                    Admin Dashboard
-                  </DropdownMenuItem>
+                  <>
+                    <DropdownMenuItem onClick={() => navigate('/admin')}>
+                      <Settings className="mr-2 h-4 w-4" />
+                      Admin Dashboard
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/admin/contests')}>
+                      <Trophy className="mr-2 h-4 w-4" />
+                      Manage Contests
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/admin/users')}>
+                      <Users className="mr-2 h-4 w-4" />
+                      Manage Users
+                    </DropdownMenuItem>
+                  </>
                 )}
                 <DropdownMenuItem onClick={onLogout}>
                   <LogOut className="mr-2 h-4 w-4" />

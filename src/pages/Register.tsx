@@ -51,17 +51,17 @@ export function Register({ onLogin }: RegisterProps) {
         formData.password
       );
       
-      const { token, user } = response.data;
+      const { access, user } = response.data;
       
-      localStorage.setItem('token', token);
+      localStorage.setItem('token', access);
       onLogin(user);
       
       toast({
-        title: "Welcome to CodeJudge!",
+        title: "Welcome to NexCode!",
         description: "Your account has been created successfully.",
       });
       
-      navigate('/problems');
+      navigate('/');
     } catch (error: any) {
       toast({
         title: "Registration failed",
@@ -83,7 +83,7 @@ export function Register({ onLogin }: RegisterProps) {
             </div>
           </div>
           <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-            Join CodeJudge
+            Join NexCode
           </h1>
           <p className="text-muted-foreground mt-2">
             Create your account and start your coding journey

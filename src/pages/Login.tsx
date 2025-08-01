@@ -34,9 +34,9 @@ export function Login({ onLogin }: LoginProps) {
 
     try {
       const response = await authAPI.login(formData.username, formData.password);
-      const { token, user } = response.data;
+      const { access, user } = response.data;
       
-      localStorage.setItem('token', token);
+      localStorage.setItem('token', access);
       onLogin(user);
       
       toast({
@@ -44,7 +44,7 @@ export function Login({ onLogin }: LoginProps) {
         description: "You have been successfully logged in.",
       });
       
-      navigate('/problems');
+      navigate('/');
     } catch (error: any) {
       toast({
         title: "Login failed",
@@ -69,7 +69,7 @@ export function Login({ onLogin }: LoginProps) {
             Welcome back
           </h1>
           <p className="text-muted-foreground mt-2">
-            Sign in to your CodeJudge account
+            Sign in to your NexCode account
           </p>
         </div>
 

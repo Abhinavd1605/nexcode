@@ -2,7 +2,7 @@ import { Badge } from '@/components/ui/badge';
 import { Check, X, Clock, AlertTriangle, Code } from 'lucide-react';
 
 interface VerdictBadgeProps {
-  verdict: 'Pending' | 'Accepted' | 'Wrong Answer' | 'Time Limit Exceeded' | 'Compilation Error';
+  verdict: string;
 }
 
 export function VerdictBadge({ verdict }: VerdictBadgeProps) {
@@ -27,9 +27,23 @@ export function VerdictBadge({ verdict }: VerdictBadgeProps) {
       className: 'bg-destructive/20 text-destructive border-destructive/30',
       icon: Code,
     },
+    'Runtime Error': {
+      className: 'bg-destructive/20 text-destructive border-destructive/30',
+      icon: AlertTriangle,
+    },
+    'Memory Limit Exceeded': {
+      className: 'bg-warning/20 text-warning border-warning/30',
+      icon: AlertTriangle,
+    },
   };
 
-  const { className, icon: Icon } = config[verdict];
+  // Get config for the verdict, or use a default for unknown verdicts
+  const verdictConfig = config[verdict] || {
+    className: 'bg-muted/20 text-muted-foreground border-muted/30',
+    icon: AlertTriangle,
+  };
+
+  const { className, icon: Icon } = verdictConfig;
 
   return (
     <Badge variant="outline" className={className}>

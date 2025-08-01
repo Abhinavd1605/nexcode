@@ -13,6 +13,11 @@ import { ProblemDetail } from "@/pages/ProblemDetail";
 import { Submissions } from "@/pages/Submissions";
 import { Leaderboard } from "@/pages/Leaderboard";
 import { AIAssistant } from "@/pages/AIAssistant";
+import { AdminDashboard } from "@/pages/AdminDashboard";
+import { AdminContests } from "@/pages/AdminContests";
+import { Contests } from "@/pages/Contests";
+import { ContestDetail } from "@/pages/ContestDetail";
+import { Profile } from "@/pages/Profile";
 import NotFound from "./pages/NotFound";
 import { authAPI } from "@/lib/api";
 
@@ -135,6 +140,62 @@ const App = () => {
                 user ? (
                   <Layout user={user} onLogout={handleLogout}>
                     <AIAssistant />
+                  </Layout>
+                ) : <Navigate to="/login" replace />
+              } 
+            />
+            
+            {/* Contest routes */}
+            <Route 
+              path="/contests" 
+              element={
+                user ? (
+                  <Layout user={user} onLogout={handleLogout}>
+                    <Contests />
+                  </Layout>
+                ) : <Navigate to="/login" replace />
+              } 
+            />
+            <Route 
+              path="/contests/:id" 
+              element={
+                user ? (
+                  <Layout user={user} onLogout={handleLogout}>
+                    <ContestDetail />
+                  </Layout>
+                ) : <Navigate to="/login" replace />
+              } 
+            />
+            
+            {/* Admin routes */}
+            <Route 
+              path="/admin" 
+              element={
+                user && user.role === 'Admin' ? (
+                  <Layout user={user} onLogout={handleLogout}>
+                    <AdminDashboard />
+                  </Layout>
+                ) : <Navigate to="/login" replace />
+              } 
+            />
+            <Route 
+              path="/admin/contests" 
+              element={
+                user && user.role === 'Admin' ? (
+                  <Layout user={user} onLogout={handleLogout}>
+                    <AdminContests />
+                  </Layout>
+                ) : <Navigate to="/login" replace />
+              } 
+            />
+            
+            {/* Profile route */}
+            <Route 
+              path="/profile" 
+              element={
+                user ? (
+                  <Layout user={user} onLogout={handleLogout}>
+                    <Profile />
                   </Layout>
                 ) : <Navigate to="/login" replace />
               } 
