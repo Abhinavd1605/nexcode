@@ -104,8 +104,8 @@ export const authAPI = {
   login: (username: string, password: string) =>
     api.post('/users/login/', { username, password }),
   
-  register: (username: string, email: string, password: string) =>
-    api.post('/users/register/', { username, email, password }),
+  register: (username: string, email: string, password: string, confirmPassword: string) =>
+    api.post('/users/register/', { username, email, password, confirm_password: confirmPassword }),
   
   logout: () => api.post('/users/logout/'),
   

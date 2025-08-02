@@ -42,13 +42,41 @@ export function Register({ onLogin }: RegisterProps) {
       return;
     }
 
+    if (formData.password.length < 8) {
+      toast({
+        title: "Password too short",
+        description: "Password must be at least 8 characters long",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!formData.username.trim()) {
+      toast({
+        title: "Username required",
+        description: "Please enter a username",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!formData.email.trim() || !formData.email.includes('@')) {
+      toast({
+        title: "Invalid email",
+        description: "Please enter a valid email address",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
 
     try {
       const response = await authAPI.register(
         formData.username,
         formData.email,
-        formData.password
+        formData.password,
+        formData.confirmPassword
       );
       
       const { access, user } = response.data;
@@ -63,9 +91,34 @@ export function Register({ onLogin }: RegisterProps) {
       
       navigate('/');
     } catch (error: any) {
+      console.error('Registration error:', error);
+      let errorMessage = "Failed to create account";
+      
+      if (error.response?.data) {
+        if (typeof error.response.data === 'object') {
+          // Handle Django validation errors
+          const errors = error.response.data;
+          if (errors.username) {
+            errorMessage = `Username: ${errors.username.join(', ')}`;
+          } else if (errors.email) {
+            errorMessage = `Email: ${errors.email.join(', ')}`;
+          } else if (errors.password) {
+            errorMessage = `Password: ${errors.password.join(', ')}`;
+          } else if (errors.confirm_password) {
+            errorMessage = `Confirm Password: ${errors.confirm_password.join(', ')}`;
+          } else if (errors.non_field_errors) {
+            errorMessage = errors.non_field_errors.join(', ');
+          } else {
+            errorMessage = Object.values(errors).flat().join(', ');
+          }
+        } else {
+          errorMessage = error.response.data;
+        }
+      }
+      
       toast({
         title: "Registration failed",
-        description: error.response?.data?.message || "Failed to create account",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
