@@ -92,6 +92,41 @@ export function Home() {
         </div>
       </section>
 
+      {/* Quick Access Section */}
+      <section className="px-4">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl font-bold text-center mb-8">
+            Quick Access
+          </h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Button asChild variant="outline" size="lg" className="h-20 flex-col gap-2">
+              <Link to="/online-compiler">
+                <Code className="h-6 w-6" />
+                Online Compiler
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="h-20 flex-col gap-2">
+              <Link to="/problems">
+                <Brain className="h-6 w-6" />
+                Practice Problems
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="h-20 flex-col gap-2">
+              <Link to="/contests">
+                <Trophy className="h-6 w-6" />
+                Join Contests
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="h-20 flex-col gap-2">
+              <Link to="/ai-assistant">
+                <Zap className="h-6 w-6" />
+                AI Assistant
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* Active Contests Section */}
       {contests.length > 0 && (
         <section className="px-4">
@@ -169,7 +204,7 @@ export function Home() {
           <h2 className="text-3xl font-bold text-center mb-12">
             Why Choose NexCode?
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <Card className="bg-gradient-card border-border shadow-card hover:shadow-glow transition-all duration-300">
               <CardHeader>
                 <Brain className="h-12 w-12 text-primary mb-4" />
@@ -182,7 +217,17 @@ export function Home() {
 
             <Card className="bg-gradient-card border-border shadow-card hover:shadow-glow transition-all duration-300">
               <CardHeader>
-                <Trophy className="h-12 w-12 text-accent mb-4" />
+                <Code className="h-12 w-12 text-accent mb-4" />
+                <CardTitle>Online Compiler</CardTitle>
+                <CardDescription>
+                  Professional online compiler with comprehensive error handling and multiple language support
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="bg-gradient-card border-border shadow-card hover:shadow-glow transition-all duration-300">
+              <CardHeader>
+                <Trophy className="h-12 w-12 text-success mb-4" />
                 <CardTitle>Competitive Programming</CardTitle>
                 <CardDescription>
                   Participate in contests and climb the leaderboard to prove your skills
@@ -192,10 +237,10 @@ export function Home() {
 
             <Card className="bg-gradient-card border-border shadow-card hover:shadow-glow transition-all duration-300">
               <CardHeader>
-                <Shield className="h-12 w-12 text-success mb-4" />
+                <Shield className="h-12 w-12 text-warning mb-4" />
                 <CardTitle>Secure Execution</CardTitle>
                 <CardDescription>
-                  Run your code safely in isolated Docker containers with proper resource limits
+                  Run your code safely in isolated containers with proper resource limits
                 </CardDescription>
               </CardHeader>
             </Card>

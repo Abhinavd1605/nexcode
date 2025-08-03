@@ -140,6 +140,9 @@ export const submissionsAPI = {
   
   runTest: (problemId: number, code: string, language: string) =>
     api.post('/submissions/run-test/', { problem_id: problemId, code, language }),
+  
+  onlineCompiler: (code: string, language: string, input: string, timeout?: number) =>
+    api.post('/online-compiler/', { code, language, input, timeout }),
 };
 
 export const leaderboardAPI = {

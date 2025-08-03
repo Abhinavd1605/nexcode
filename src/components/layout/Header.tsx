@@ -44,6 +44,9 @@ export function Header({ user, onLogout }: HeaderProps) {
           <Link to="/ai-assistant" className="text-foreground/80 hover:text-foreground transition-colors">
             AI Assistant
           </Link>
+          <Link to="/online-compiler" className="text-foreground/80 hover:text-foreground transition-colors">
+            Online Compiler
+          </Link>
         </nav>
 
         <div className="flex items-center space-x-4">
@@ -78,6 +81,10 @@ export function Header({ user, onLogout }: HeaderProps) {
                 <DropdownMenuItem onClick={() => navigate('/ai-assistant')}>
                   <MessageSquare className="mr-2 h-4 w-4" />
                   AI Assistant
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/online-compiler')}>
+                  <Code className="mr-2 h-4 w-4" />
+                  Online Compiler
                 </DropdownMenuItem>
                 {user.role === 'Admin' && (
                   <>

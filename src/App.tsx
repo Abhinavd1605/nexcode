@@ -13,6 +13,7 @@ import { ProblemDetail } from "@/pages/ProblemDetail";
 import { Submissions } from "@/pages/Submissions";
 import { Leaderboard } from "@/pages/Leaderboard";
 import { AIAssistant } from "@/pages/AIAssistant";
+import { OnlineCompiler } from "@/pages/OnlineCompiler";
 import { AdminDashboard } from "@/pages/AdminDashboard";
 import { AdminContests } from "@/pages/AdminContests";
 import { Contests } from "@/pages/Contests";
@@ -140,6 +141,16 @@ const App = () => {
                 user ? (
                   <Layout user={user} onLogout={handleLogout}>
                     <AIAssistant />
+                  </Layout>
+                ) : <Navigate to="/login" replace />
+              } 
+            />
+            <Route 
+              path="/online-compiler" 
+              element={
+                user ? (
+                  <Layout user={user} onLogout={handleLogout}>
+                    <OnlineCompiler />
                   </Layout>
                 ) : <Navigate to="/login" replace />
               } 
